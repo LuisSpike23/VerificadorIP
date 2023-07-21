@@ -1,0 +1,83 @@
+/* luis leonardo muñoz hernandez
+  al20760214@ite.edu.mx---6461166608
+  el siguiente codigo en C++ se encarga de verificar que una ip sea 
+  real y existente, parte de la verificacion es imprimir un mensaje 
+  donde especifique si es valido o no, el proyecto fue realizado gracias 
+  a los cursos gratuitos donde se presentan ejercicios similares o enfocados a 
+  otras problematicas, decidi no utilizar codigo de una inteligencia artificial como chatGPT 
+  por el confliccto de no identificar o reconocer lo que realmente hace el codigo */
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+ 
+// comprobar si una string dada es una string numérica o no
+bool isNumber(const string &str)
+{
+    // `std::find_first_not_of` busca en la string el primer carácter
+    // que no coincide con ninguno de los caracteres especificados en sus argumentos
+    return !str.empty() &&
+        (str.find_first_not_of("[0123456789]") == std::string::npos);
+}
+ 
+// Función para dividir la string `str` usando un delimitador dado
+vector<string> split(const string &str, char delim)
+{
+    auto i = 0;
+    vector<string> list;
+ 
+    auto pos = str.find(delim);
+ 
+    while (pos != string::npos)
+    {
+        list.push_back(str.substr(i, pos - i));
+        i = ++pos;
+        pos = str.find(delim, pos);
+    }
+ 
+    list.push_back(str.substr(i, str.length()));
+ 
+    return list;
+}
+ 
+// Función para validar una dirección IP
+bool validateIP(string ip)
+{
+    // dividir la string en tokens
+    vector<string> list = split(ip, '.');
+ 
+    // si el tamaño del token no es igual a cuatro
+    if (list.size() != 4) {
+        return false;
+    }
+ 
+    // validar cada ficha
+    for (string str: list)
+    {
+        // verifica que la string sea un número o no, y los números
+        // están en el rango válido
+        if (!isNumber(str) || stoi(str) > 255 || stoi(str) < 0) {
+            return false;
+        }
+    }
+ 
+    return true;
+}
+ 
+// Validar una dirección IP en C++
+int main()
+{
+    string ip = "14.8.9.28";
+    // string ip = "100.xyz.1.15";
+    // string ip = "115.300.10.60";
+ 
+    if (validateIP(ip)) {
+        cout << "Valid IP Address" << endl;
+    }
+    else {
+        cout << "Invalid IP Address" << endl;
+    }
+ 
+    return 0;
+}
+
